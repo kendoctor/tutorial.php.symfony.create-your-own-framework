@@ -8,6 +8,8 @@
  */
 namespace Simplex;
 
+use Simplex\Event\ResponseEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -16,9 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 class Framework {
     private $matcher;
     private $resolver;
+    private $dispatcher;
 
-    public function __construct(ControllerResolverInterface $resolver, UrlMatcherInterface $matcher)
+    public function __construct(EventDispatcherInterface $dispatcher, ControllerResolverInterface $resolver, UrlMatcherInterface $matcher)
     {
+        $this->dispatcher = $dispatcher;
         $this->matcher = $matcher;
         $this->resolver = $resolver;
     }
@@ -43,6 +47,8 @@ class Framework {
             echo $e->getMessage();
             $response = new Response('Internal errors.', 500);
         }
+
+        $this->dispatcher->dispatch('response', new ResponseEvent($response, $request));
 
         return $response;
     }
