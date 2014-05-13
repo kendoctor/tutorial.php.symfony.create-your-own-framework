@@ -1,0 +1,15 @@
+{
+    "name": "kendoctor/tutorial.php.symfony.create-your-own-framework",
+    "description": "It's a series of versions that demostrates how to create a framework with symfony2 components",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kendoctor",
+            "email": "kendoctor@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/class-loader" : "*"
+    }
+}
