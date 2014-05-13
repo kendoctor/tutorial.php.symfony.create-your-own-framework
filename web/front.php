@@ -15,6 +15,10 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Store;
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+
 
 $request = Request::createFromGlobals();
 $routes = include __DIR__.'/../src/routing.php';
@@ -51,8 +55,10 @@ $dispatcher->addListener('response', function(\Simplex\Event\ResponseEvent $even
 });
 */
 
+
 $framework = new \Simplex\Framework($dispatcher, $resolver, $matcher);
+//$framework = new HttpCache($framework,new Store(__DIR__.'/../cache'));
+$framework = new HttpCache($framework,new Store(__DIR__.'/../cache'), new Esi(), array('debug' => true));
+$framework->handle($request)->send();
 
-$response = $framework->handle($request);
 
-$response->send();

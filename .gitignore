@@ -1,5 +1,6 @@
 /vendor/
 /bin/
+/cache/
 /composer.lock
 /composer.phar
 /.idea/

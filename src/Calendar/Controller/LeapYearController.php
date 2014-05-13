@@ -15,11 +15,38 @@ use Symfony\Component\HttpFoundation\Response;
 class LeapYearController {
     public function indexAction($year)
     {
+
         $leapYear = new LeapYear();
         if($leapYear->isLeapYear($year))
         {
-            return new Response(sprintf('Yep, %d, this is a leap year!', $year));
+            $response =  new Response(sprintf('Yep, %d, this is a leap year!'.rand(), $year));
+        }else
+        {
+            $response = new Response(sprintf('Nope, %d, this is not a leap year!', $year));
         }
-        return new Response(sprintf('Nope, %d, this is not a leap year!', $year));
+
+        $response->setTtl(10);
+
+        /*
+         $date = date_create_from_format('Y-m-d H:i:s', '2005-10-15 10:00:00');
+
+           $response->setCache(array(
+               'public'        => true,
+               'etag'          => 'abcde',
+               'last_modified' => $date,
+               'max_age'       => 10,
+               's_maxage'      => 10,
+           ));
+
+           // it is equivalent to the following code
+           $response->setPublic();
+           $response->setEtag('abcde');
+           $response->setLastModified($date);
+           $response->setMaxAge(10);
+           $response->setSharedMaxAge(10);
+
+        */
+
+        return $response;
     }
 }
