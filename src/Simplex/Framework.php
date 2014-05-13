@@ -8,8 +8,8 @@
  */
 namespace Simplex;
 
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +17,7 @@ class Framework {
     private $matcher;
     private $resolver;
 
-    public function __construct(ControllerResolver $resolver, UrlMatcher $matcher)
+    public function __construct(ControllerResolverInterface $resolver, UrlMatcherInterface $matcher)
     {
         $this->matcher = $matcher;
         $this->resolver = $resolver;
