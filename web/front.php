@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 $request = Request::createFromGlobals();
 $response = new Response();
@@ -31,10 +32,16 @@ function render_template(Request $request)
 $context = new RequestContext();
 $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
+$resolver = new ControllerResolver();
 
 try {
     $request->attributes->add($matcher->match($request->getPathInfo()));
-    $response = call_user_func($request->attributes->get('_controller', 'render_template'), $request);
+
+    $controller = $resolver->getController($request);
+
+    $arguments = $resolver->getArguments($request, $controller);
+
+    $response = call_user_func_array($controller, $arguments);
 }
 catch(ResourceNotFoundException $e)
 {
@@ -42,7 +49,7 @@ catch(ResourceNotFoundException $e)
 }
 catch(\Exception $e)
 {
-    $response = new Response('Internal errors', 500);
+    $response = new Response('Internal errors.', 500);
 }
 
 $response->send();
