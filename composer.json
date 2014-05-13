@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony/class-loader" : "*"
+        "symfony/class-loader" : "2.4.*",
+        "symfony/http-foundation" : "2.4.*"
     }
 }
