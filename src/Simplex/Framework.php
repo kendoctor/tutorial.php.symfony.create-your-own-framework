@@ -1,22 +1,14 @@
 <?php
 /**
  * Created by JetBrains PhpStorm.
- * User: Administrator
+ * User: Kendoctor
  * Date: 14-5-13
  * Time: 下午9:29
  * To change this template use File | Settings | File Templates.
  */
 namespace Simplex;
 
-use Simplex\Event\ResponseEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 class Framework extends  HttpKernel {
     /* not needed anymore as extends HttpKernel
