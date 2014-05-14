@@ -18,7 +18,10 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
-
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\EventListener\RouterListener;
+use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
+use Symfony\Component\HttpKernel\Exception\FlattenException;
 
 $request = Request::createFromGlobals();
 $routes = include __DIR__.'/../src/routing.php';
@@ -29,9 +32,18 @@ $matcher = new UrlMatcher($routes, $context);
 $resolver = new ControllerResolver();
 $dispatcher = new EventDispatcher();
 
+//listener for routing
+$dispatcher->addSubscriber(new RouterListener($matcher));
+
+//listener for converting string to response
+$dispatcher->addSubscriber(new \Simplex\Subscriber\StringResponseSubscriber());
+
+//listener for customizing exception handling
+$dispatcher->addSubscriber(new \Simplex\Subscriber\ExceptionSubscriber());
+
 //use subscribers
-$dispatcher->addSubscriber(new \Simplex\Subscriber\GoogleSubscriber());
-$dispatcher->addSubscriber(new \Simplex\Subscriber\ContentLengthSubscriber());
+//$dispatcher->addSubscriber(new \Simplex\Subscriber\GoogleSubscriber());
+//$dispatcher->addSubscriber(new \Simplex\Subscriber\ContentLengthSubscriber());
 
 //use listeners
 /*
@@ -56,9 +68,9 @@ $dispatcher->addListener('response', function(\Simplex\Event\ResponseEvent $even
 */
 
 
-$framework = new \Simplex\Framework($dispatcher, $resolver, $matcher);
+$framework = new \Simplex\Framework($dispatcher, $resolver);
 //$framework = new HttpCache($framework,new Store(__DIR__.'/../cache'));
-$framework = new HttpCache($framework,new Store(__DIR__.'/../cache'), new Esi(), array('debug' => true));
+//$framework = new HttpCache($framework,new Store(__DIR__.'/../cache'), new Esi(), array('debug' => true));
 $framework->handle($request)->send();
 
 

@@ -22,7 +22,8 @@ class LeapYearController {
             $response =  new Response(sprintf('Yep, %d, this is a leap year!'.rand(), $year));
         }else
         {
-            $response = new Response(sprintf('Nope, %d, this is not a leap year!', $year));
+            //allows to return a string now.
+            return  sprintf('Nope, %d, this is not a leap year!', $year);
         }
 
         $response->setTtl(10);
